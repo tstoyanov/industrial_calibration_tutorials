@@ -1,16 +1,15 @@
 <?xml version="1.0" ?>
 
 <robot name="Robot1" xmlns:xacro="http://ros.org/wiki/xacro">
-     <xacro:include filename="$(find industrial_extrinsic_cal)/urdf/asus_sensor_cal_macro.xacro" />
      <xacro:include filename="$(find industrial_extrinsic_cal)/urdf/calibration_transform_macro.xacro" />
      
       <link name="yumi_body" />
 
       <link name="target_frame" >
 	<visual>
-            <origin xyz="0.19 0.035 0.0" />
+            <origin xyz="0.105 0.1485 0.002" />
  	    <geometry>
-                <box size="0.53 0.205 0.005" />
+                <box size="0.21 0.297 0.002" />
             </geometry>
           </visual>
      </link>
@@ -18,9 +17,18 @@
      <joint name="$world_2_cal_target_joint" type="fixed" >
         <parent link="yumi_body" />
 	<child link="target_frame" />
-	<origin rpy="0 0 0" xyz="0.3 0 0.025" />
+	<origin rpy="0 0 0" xyz="0.221 0.0435 0.035" />
      </joint>
      
+     <link name="camera_link" >
+         <visual>
+            <origin xyz=".125 .035 .0" />
+            <geometry>
+                 <box size=".25 .07 .045" />
+            </geometry>
+         </visual>
+     </link>
+
      <link name="kinect2_link" >
          <visual>
             <origin xyz=".125 .035 .0" />
@@ -31,7 +39,7 @@
      </link>
 
      <xacro:calibration_definitions child_link="kinect2_link" parent_link="yumi_body" />
-     <xacro:asus_sensor_definitions prefix="camera" parent_link="yumi_body" />
+     <xacro:calibration_definitions child_link="camera_link" parent_link="yumi_body" />
 
 </robot>
 
