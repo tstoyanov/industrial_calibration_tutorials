@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
   <!-- This launch file is copy of onenni.launch with small modifications:
         * Topic_ns and tf_prefix replaced a single "camera" parameters

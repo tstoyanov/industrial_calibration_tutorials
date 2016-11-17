@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<launch>
+
+   <!-- arguments for this file -->
+   <arg name="robot1" default="yumi" />
+   <arg name="xacro_model" default=" $(find ind_cal_multi_camera)/urdf/yumi_camera_scene.xacro" />
+
+   <!-- Launch the asus camera nodes -->
+  <include file="$(find openni2_launch)/launch/openni2.launch" >
+    <arg name="device_id" value="1@1" />
+    <arg name="publish_tf" value="false" />
+  </include>
+
+  <!-- Launch kinect2 camera-->
+  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch" >
+    <arg name="depth_method" value="cuda" />
+    <arg name="publish_tf" value="true" />
+  </include>
+
+
+   <!-- Launch the extrinsic calibration service -->
+   <node pkg="industrial_extrinsic_cal" type="service_node" name="calibration_service_node" output="screen" >
+     <param name="yaml_file_path" value="$(find ind_cal_multi_camera)/yaml/" />
+     <rosparam>
+       camera_file: "yumi_camera_scene_cameras.yaml"
+       target_file: "yumi_camera_scene_targets.yaml"
+       cal_job_file: "yumi_camera_scene_caljob.yaml"
+       store_results_package_name: "ind_cal_multi_camera"
+       store_results_file_name: "yumi_camera_scene_transforms.launch"
+     </rosparam>
+   </node> 
+
+   <!-- Load the xacro file of the tower and cameras onto the parameter server as a robot description -->
+   <param name="$(arg robot1)/robot_description" command="$(find xacro)/xacro.py $(arg xacro_model)" />
+
+   <!-- Launch robot state publishers for scene -->
+   <node ns="$(arg robot1)" name="camera_scene_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+            <!--param name="tf_prefix" value="" /-->
+            <param name="publish_frequency" value="50" />
+    </node>
+
+   <!-- Launch Rviz -->
+   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ind_cal_multi_camera)/camera_scene.rviz"/>
+
+   <!-- Launch mutable joint state publisher for calibratable transforms -->
+   <node  name="camera_locs" pkg="industrial_extrinsic_cal" type="mutable_joint_state_publisher" >
+       <param name="mutable_joint_state_yaml_file" value="$(find ind_cal_multi_camera)/yaml/yumi_camera_scene_mutable_joint_states.yaml" />
+       <remap from="mutable_joint_states" to="$(arg robot1)/joint_states" />
+   </node>
+
+
+</launch>

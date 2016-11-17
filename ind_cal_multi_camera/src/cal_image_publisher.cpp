@@ -17,8 +17,9 @@
  */
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
-#include <opencv/cvwimage.h>
-#include <opencv/highgui.h>
+//#include <opencv2/cvwimage.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include <cv_bridge/cv_bridge.h>
 
 int main(int argc, char** argv)

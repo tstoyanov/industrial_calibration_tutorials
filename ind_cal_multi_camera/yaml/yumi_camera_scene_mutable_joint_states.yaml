@@ -1,0 +1,12 @@
+camera_link_yaw_joint: 3.16
+camera_link_pitch_joint: 0.795
+camera_link_roll_joint: 0.02
+camera_link_x_joint: 0.86
+camera_link_y_joint: -0.01
+camera_link_z_joint: 0.9
+kinect2_link_yaw_joint: -2.3
+kinect2_link_pitch_joint: 0.0
+kinect2_link_roll_joint: -2.1
+kinect2_link_x_joint: -0.3
+kinect2_link_y_joint: 0.45
+kinect2_link_z_joint: 0.53
